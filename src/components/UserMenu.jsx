@@ -17,7 +17,7 @@ const UserMenu = ({ user, onLogout }) => {
     if (!name) return 'U';
     return name
       .split(' ')
-      .map(word => word[0])
+      .map(word => word[0 ])
       .join('')
       .toUpperCase()
       .substring(0, 2);
@@ -78,7 +78,7 @@ const UserMenu = ({ user, onLogout }) => {
               <div className="dropdown-divider"></div>
               
               {/* Menu Items */}
-              <Link to="/profile" className="dropdown-item" onClick={() => setIsOpen(false)}>
+              {/* <Link to="/profile" className="dropdown-item" onClick={() => setIsOpen(false)}>
                 <User size={18} />
                 <span>My Profile</span>
               </Link>
@@ -100,7 +100,7 @@ const UserMenu = ({ user, onLogout }) => {
               <Link to="/settings" className="dropdown-item" onClick={() => setIsOpen(false)}>
                 <Settings size={18} />
                 <span>Settings</span>
-              </Link>
+              </Link> */}
               
               {user.role === 'admin' && (
                 <>
