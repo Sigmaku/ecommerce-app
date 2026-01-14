@@ -80,30 +80,6 @@ const Header = ({ cartCount, searchQuery, setSearchQuery, user, onLogout }) => {
           
           <UserMenu user={user} onLogout={onLogout} />
         </div>
-        
-        {/* Mobile Search Form */}
-        <form onSubmit={handleSearch} className="search-form mobile-search">
-          <input
-            type="text"
-            placeholder="Search products..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="search-input"
-          />
-          <button type="submit" className="search-button">
-            🔍
-          </button>
-          <button 
-            type="button" 
-            className="close-search"
-            onClick={() => {
-              const searchInput = document.querySelector('.search-form.mobile-search');
-              if (searchInput) searchInput.style.display = 'none';
-            }}
-          >
-            ✕
-          </button>
-        </form>
       </div>
     </header>
   );
