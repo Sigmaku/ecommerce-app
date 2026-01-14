@@ -1,9 +1,21 @@
+import { useState, useEffect } from 'react'; // TAMBAH useEffect DI SINI
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
 import UserMenu from './UserMenu';
 
 const Header = ({ cartCount, searchQuery, setSearchQuery, user, onLogout }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (mobileMenuOpen && !event.target.closest('.nav') && !event.target.closest('.mobile-menu-btn')) {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [mobileMenuOpen]);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -17,6 +29,16 @@ const Header = ({ cartCount, searchQuery, setSearchQuery, user, onLogout }) => {
           <span className="logo-red">NARS</span>STORE
         </Link>
         
+        {/* Mobile Menu Button */}
+        <button 
+          className="mobile-menu-btn"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+        >
+          {mobileMenuOpen ? '✕' : '☰'}
+        </button>
+        
+        {/* Desktop Nav */}
         <nav className={`nav ${mobileMenuOpen ? 'nav-open' : ''}`}>
           <Link to="/" className="nav-link" onClick={() => setMobileMenuOpen(false)}>
             Home
@@ -25,7 +47,7 @@ const Header = ({ cartCount, searchQuery, setSearchQuery, user, onLogout }) => {
             Products
           </Link>
           <Link to="/cart" className="nav-link" onClick={() => setMobileMenuOpen(false)}>
-            Cart
+            Cart {cartCount > 0 && <span className="cart-count-mobile">({cartCount})</span>}
           </Link>
           {user?.role === 'admin' && (
             <Link to="/admin/dashboard" className="nav-link admin-link" onClick={() => setMobileMenuOpen(false)}>
@@ -35,7 +57,8 @@ const Header = ({ cartCount, searchQuery, setSearchQuery, user, onLogout }) => {
         </nav>
         
         <div className="header-actions">
-          <form onSubmit={handleSearch} className="search-form">
+          {/* Desktop Search - Hidden on Mobile */}
+          <form onSubmit={handleSearch} className="search-form desktop-search">
             <input
               type="text"
               placeholder="Search electronics..."
@@ -48,6 +71,22 @@ const Header = ({ cartCount, searchQuery, setSearchQuery, user, onLogout }) => {
             </button>
           </form>
           
+          {/* Mobile Search Button */}
+          <button 
+            className="mobile-search-btn"
+            onClick={() => {
+              // Show search on mobile
+              const searchInput = document.querySelector('.search-form.mobile-search');
+              if (searchInput) {
+                searchInput.style.display = 'flex';
+                searchInput.querySelector('input').focus();
+              }
+            }}
+            aria-label="Search"
+          >
+            🔍
+          </button>
+          
           <Link to="/cart" className="cart-icon">
             🛒
             {cartCount > 0 && (
@@ -55,17 +94,32 @@ const Header = ({ cartCount, searchQuery, setSearchQuery, user, onLogout }) => {
             )}
           </Link>
           
-          {/* UserMenu menerima user dan onLogout */}
           <UserMenu user={user} onLogout={onLogout} />
-          
-          <button 
-            className="mobile-menu-btn"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle menu"
-          >
-            {mobileMenuOpen ? '✕' : '☰'}
-          </button>
         </div>
+        
+        {/* Mobile Search Form */}
+        <form onSubmit={handleSearch} className="search-form mobile-search">
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="search-input"
+          />
+          <button type="submit" className="search-button">
+            🔍
+          </button>
+          <button 
+            type="button" 
+            className="close-search"
+            onClick={() => {
+              const searchInput = document.querySelector('.search-form.mobile-search');
+              if (searchInput) searchInput.style.display = 'none';
+            }}
+          >
+            ✕
+          </button>
+        </form>
       </div>
     </header>
   );
