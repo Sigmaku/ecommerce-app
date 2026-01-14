@@ -26,7 +26,7 @@ const SplashScreen = ({ onFinish }) => {
       <div className="splash-content">
         <div className="logo-animation">
           <div className="logo-circle"></div>
-          <div className="logo-text">MODERNSTORE</div>
+          <div className="logo-text"><span className="logo-red">NARS</span>STORE</div>
         </div>
         
         <div className="progress-container">
