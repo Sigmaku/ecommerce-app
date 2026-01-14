@@ -71,22 +71,6 @@ const Header = ({ cartCount, searchQuery, setSearchQuery, user, onLogout }) => {
             </button>
           </form>
           
-          {/* Mobile Search Button */}
-          <button 
-            className="mobile-search-btn"
-            onClick={() => {
-              // Show search on mobile
-              const searchInput = document.querySelector('.search-form.mobile-search');
-              if (searchInput) {
-                searchInput.style.display = 'flex';
-                searchInput.querySelector('input').focus();
-              }
-            }}
-            aria-label="Search"
-          >
-            🔍
-          </button>
-          
           <Link to="/cart" className="cart-icon">
             🛒
             {cartCount > 0 && (
